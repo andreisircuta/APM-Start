@@ -7,7 +7,7 @@ import {Component} from "@angular/core";
       <h1>
         {{pageTitle}}
       </h1>
-      <div>My first component</div>
+      <div>My first componenta</div>
     </div>
   `
 })
