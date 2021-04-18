@@ -1,41 +1,23 @@
 import {Component, OnInit} from '@angular/core';
 import {Product} from "./product";
+import {ProductService} from "./services/product.service";
 
 @Component({
   selector: 'product-list',
   templateUrl: './product-list.component.html',
-  styleUrls:['./product-list.component.css']
+  styleUrls:['./product-list.component.css'],
+  providers:[ProductService]
 })
 export class ProductListComponent implements OnInit{
   pageTitle: string = 'Product List';
   imageWidth: number = 40;
   imageMargin: number = 2;
   showImage: boolean = false;
-  private _filterString: string = "";
   filteredProducts: Product[]=[];
+  products: Product[] = [];
 
-  products: Product[] = [
-    {
-      "productId": 2,
-      "productName": "Garden Cart",
-      "productCode": "GDN-0023",
-      "releaseDate": "March 18, 2021",
-      "description": "15 gallon capacity rolling garden cart",
-      "price": 32.99,
-      "starRating": 2,
-      "imageUrl": "assets/images/garden_cart.png"
-    },
-    {
-      "productId": 5,
-      "productName": "Hammer",
-      "productCode": "TBX-0048",
-      "releaseDate": "May 21, 2021",
-      "description": "Curved claw steel hammer",
-      "price": 8.9,
-      "starRating": 4.3,
-      "imageUrl": "assets/images/hammer.png"
-    }
-  ];
+  private _filterString: string = "";
+  constructor(private productService: ProductService) {}
 
   onShowImageButton($event: MouseEvent) : void {
     this.showImage = !this.showImage;
@@ -43,6 +25,8 @@ export class ProductListComponent implements OnInit{
 
   ngOnInit(): void {
     console.log("on init Product List component");
+    this.products = this.productService.getProducts();
+    this.filteredProducts = this.products;
   }
 
   private performFilter(filterBy: string): Product[] {
