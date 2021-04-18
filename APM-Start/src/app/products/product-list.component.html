@@ -34,7 +34,7 @@
         </thead>
 
         <tbody>
-          <tr *ngFor="let product of products; let i = index">
+          <tr *ngFor="let product of filterProductsByName(); let i = index">
             <td>{{i + 1}}
               <img *ngIf="showImage"
                    [src]="product.imageUrl" [title]="product.productName | uppercase"
