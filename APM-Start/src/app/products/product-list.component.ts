@@ -1,10 +1,12 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
+import {Product} from "./product";
 
 @Component({
   selector: 'product-list',
-  templateUrl: './product-list.component.html'
+  templateUrl: './product-list.component.html',
+  styleUrls:['./product-list.component.css']
 })
-export class ProductListComponent{
+export class ProductListComponent implements OnInit{
   pageTitle: string = 'Product List';
   imageWidth: number = 40;
   imageMargin: number = 2;
@@ -12,7 +14,7 @@ export class ProductListComponent{
   filterString: string = "cart";
 
 
-  products: any[] = [
+  products: Product[] = [
     {
       "productId": 2,
       "productName": "Garden Cart",
@@ -37,5 +39,9 @@ export class ProductListComponent{
 
   onShowImageButton($event: MouseEvent) : void {
     this.showImage = !this.showImage;
+  }
+
+  ngOnInit(): void {
+    console.log("on init Product List component");
   }
 }
