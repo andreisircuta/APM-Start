@@ -14,7 +14,7 @@ import {ProductListComponent} from './product-list.component';
 })
 export class ProductDetailsComponent implements OnInit, OnDestroy {
   pageTitle: string = "Product details";
-  product:Product | undefined;
+  public product:Product | undefined;
   private subscription!: Subscription;
 
   constructor(private route: ActivatedRoute, private router: Router, private productService: ProductService) { }
@@ -22,34 +22,20 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     const id = Number(this.route.snapshot.paramMap.get('id'));
     this.pageTitle += `: ${id}`;
-    this.product = this.loadProduct(id);
+    this.loadProduct(id);
     console.log(this.product);
   }
 
-  private loadProduct(id: Number) : Product | undefined{
-    // let product;
-    // this.subscription = this.productService.getProducts().pipe().subscribe({
-    //   next: prods => {
-    //     for (let prod of prods) {
-    //       if(prod.productId === id){
-    //         product = prod;
-    //       }
-    //     }
-    //   }
-    // });
-    //
-    // return product;
-
-    return {
-        "productId": 1,
-        "productName": "Leaf Rake",
-        "productCode": "GDN-0011",
-        "releaseDate": "March 19, 2021",
-        "description": "Leaf rake with 48-inch wooden handle.",
-        "price": 19.95,
-        "starRating": 3.2,
-        "imageUrl": "assets/images/leaf_rake.png"
+  private loadProduct(id: Number) : void{
+    this.subscription = this.productService.getProducts().pipe().subscribe({
+      next: prods => {
+        for (let prod of prods) {
+          if(prod.productId === id){
+            this.product = prod;
+          }
+        }
       }
+    });
   }
 
   public onBackButton() : void{
