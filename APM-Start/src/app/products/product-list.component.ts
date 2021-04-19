@@ -1,8 +1,11 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, Injectable, OnDestroy, OnInit} from '@angular/core';
 import {Product} from "./product";
 import {ProductService} from "./services/product.service";
 import {Observable, Subscription} from 'rxjs';
 
+@Injectable({
+  providedIn: 'root'
+})
 @Component({
   selector: 'product-list',
   templateUrl: './product-list.component.html',
