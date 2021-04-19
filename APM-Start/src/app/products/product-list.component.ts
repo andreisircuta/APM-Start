@@ -1,6 +1,7 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Product} from "./product";
 import {ProductService} from "./services/product.service";
+import {Observable, Subscription} from 'rxjs';
 
 @Component({
   selector: 'product-list',
@@ -8,7 +9,7 @@ import {ProductService} from "./services/product.service";
   styleUrls:['./product-list.component.css'],
   providers:[ProductService]
 })
-export class ProductListComponent implements OnInit{
+export class ProductListComponent implements OnInit, OnDestroy{
   pageTitle: string = 'Product List';
   imageWidth: number = 40;
   imageMargin: number = 2;
@@ -17,6 +18,8 @@ export class ProductListComponent implements OnInit{
   products: Product[] = [];
 
   private _filterString: string = "";
+  private productObservable!: Subscription;
+
   constructor(private productService: ProductService) {}
 
   onShowImageButton($event: MouseEvent) : void {
@@ -25,8 +28,15 @@ export class ProductListComponent implements OnInit{
 
   ngOnInit(): void {
     console.log("on init Product List component");
-    this.products = this.productService.getProducts();
+    this.initProducts()
     this.filteredProducts = this.products;
+  }
+
+  private initProducts() : void {
+    this.productObservable = this.productService.getProducts().subscribe({
+      next: products => this.products = products,
+      error: err => console.error(err)
+    });
   }
 
   private performFilter(filterBy: string): Product[] {
@@ -51,5 +61,9 @@ export class ProductListComponent implements OnInit{
 
   onRatingClick(message: string) {
     this.pageTitle = "Product list - on click " + message;
+  }
+
+  ngOnDestroy(): void {
+    this.productObservable.unsubscribe();
   }
 }
